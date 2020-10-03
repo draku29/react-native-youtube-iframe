@@ -68,6 +68,8 @@ export const MAIN_SCRIPT = (
     modestbranding,
     rel,
     start,
+    playsinline = true,
+    showinfo = true,
   },
   allowWebViewZoom,
 ) => `<!DOCTYPE html>
@@ -117,7 +119,6 @@ export const MAIN_SCRIPT = (
           width: '1000',
           videoId: '${videoId || ''}',
           playerVars: {
-            playsinline: 1,
             loop: ${loop ? 1 : 0},
             controls: ${controls ? 1 : 0},
             cc_lang_pref: '${cc_lang_pref || ''}',
@@ -132,6 +133,8 @@ export const MAIN_SCRIPT = (
             start: ${start},
             listType:  '${typeof playList === 'string' ? 'playlist' : ''}',
             list: '${typeof playList === 'string' ? playList : ''}',
+            playsinline: ${playsinline ? 1 : 0},
+            showinfo: ${showinfo ? 1 : 0},
           },
           events: {
             'onReady': onPlayerReady,
