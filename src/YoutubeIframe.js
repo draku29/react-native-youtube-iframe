@@ -48,53 +48,57 @@ const YoutubeIframe = (
 
   useImperativeHandle(
     ref,
-    () => ({
-      getDuration: () => {
-        webViewRef.current.injectJavaScript(PLAYER_FUNCTIONS.durationScript);
-        return new Promise(resolve => {
-          eventEmitter.current.once('getDuration', resolve);
-        });
-      },
-      getCurrentTime: () => {
-        webViewRef.current.injectJavaScript(PLAYER_FUNCTIONS.currentTimeScript);
-        return new Promise(resolve => {
-          eventEmitter.current.once('getCurrentTime', resolve);
-        });
-      },
-      isMuted: () => {
-        webViewRef.current.injectJavaScript(PLAYER_FUNCTIONS.isMutedScript);
-        return new Promise(resolve => {
-          eventEmitter.current.once('isMuted', resolve);
-        });
-      },
-      getVolume: () => {
-        webViewRef.current.injectJavaScript(PLAYER_FUNCTIONS.getVolumeScript);
-        return new Promise(resolve => {
-          eventEmitter.current.once('getVolume', resolve);
-        });
-      },
-      getPlaybackRate: () => {
-        webViewRef.current.injectJavaScript(
-          PLAYER_FUNCTIONS.getPlaybackRateScript,
-        );
-        return new Promise(resolve => {
-          eventEmitter.current.once('getPlaybackRate', resolve);
-        });
-      },
-      getAvailablePlaybackRates: () => {
-        webViewRef.current.injectJavaScript(
-          PLAYER_FUNCTIONS.getAvailablePlaybackRatesScript,
-        );
-        return new Promise(resolve => {
-          eventEmitter.current.once('getAvailablePlaybackRates', resolve);
-        });
-      },
-      seekTo: (seconds, allowSeekAhead) => {
-        webViewRef.current.injectJavaScript(
-          PLAYER_FUNCTIONS.seekToScript(seconds, allowSeekAhead),
-        );
-      },
-    }),
+    () => {
+      const injectJS = webViewRef.current.injectJavaScript;
+
+      return {
+        getDuration: () => {
+          injectJS(PLAYER_FUNCTIONS.durationScript);
+          return new Promise(resolve => {
+            eventEmitter.current.once('getDuration', resolve);
+          });
+        },
+        getCurrentTime: () => {
+          injectJS(PLAYER_FUNCTIONS.currentTimeScript);
+          return new Promise(resolve => {
+            eventEmitter.current.once('getCurrentTime', resolve);
+          });
+        },
+        isMuted: () => {
+          injectJS(PLAYER_FUNCTIONS.isMutedScript);
+          return new Promise(resolve => {
+            eventEmitter.current.once('isMuted', resolve);
+          });
+        },
+        getVolume: () => {
+          injectJS(PLAYER_FUNCTIONS.getVolumeScript);
+          return new Promise(resolve => {
+            eventEmitter.current.once('getVolume', resolve);
+          });
+        },
+        getPlaybackRate: () => {
+          injectJS(
+            PLAYER_FUNCTIONS.getPlaybackRateScript,
+          );
+          return new Promise(resolve => {
+            eventEmitter.current.once('getPlaybackRate', resolve);
+          });
+        },
+        getAvailablePlaybackRates: () => {
+          injectJS(
+            PLAYER_FUNCTIONS.getAvailablePlaybackRatesScript,
+          );
+          return new Promise(resolve => {
+            eventEmitter.current.once('getAvailablePlaybackRates', resolve);
+          });
+        },
+        seekTo: (seconds, allowSeekAhead) => {
+          injectJS(
+            PLAYER_FUNCTIONS.seekToScript(seconds, allowSeekAhead),
+          );
+        },
+      })
+    },
     [],
   );
 
