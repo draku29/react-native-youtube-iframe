@@ -1,7 +1,9 @@
 import {MUTE_MODE, PAUSE_MODE, PLAY_MODE, UNMUTE_MODE} from './constants';
 
+const getPostMessage = (eventType, data) => `window.ReactNativeWebView.postMessage(JSON.stringify({eventType: ${eventType}, data: ${data}));`;
+
 const getPostMessageFunction = (eventType, data) => `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: ${eventType}, data: ${data}));
+${getPostMessage(eventType,data)}
 true;
 `;
 
