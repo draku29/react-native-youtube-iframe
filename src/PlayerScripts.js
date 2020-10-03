@@ -1,5 +1,10 @@
 import {MUTE_MODE, PAUSE_MODE, PLAY_MODE, UNMUTE_MODE} from './constants';
 
+const getPlayerFunction = (eventType, data) => `
+window.ReactNativeWebView.postMessage(JSON.stringify({eventType: ${eventType}, data: ${data}));
+true;
+`;
+
 export const PLAYER_FUNCTIONS = {
   durationScript: `
 window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'getDuration', data: player.getDuration()}));
@@ -69,7 +74,7 @@ export const MAIN_SCRIPT = (
     rel,
     start,
     playsinline = true,
-    showinfo = true,
+    showinfo,
   },
   allowWebViewZoom,
 ) => `<!DOCTYPE html>
