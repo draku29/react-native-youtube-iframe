@@ -1,35 +1,20 @@
 import {MUTE_MODE, PAUSE_MODE, PLAY_MODE, UNMUTE_MODE} from './constants';
 
-const getPlayerFunction = (eventType, data) => `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: ${eventType}, data: ${data}));
+const getPostMessage = (eventType, data) =>
+  `window.ReactNativeWebView.postMessage(JSON.stringify({eventType: ${eventType}, data: ${data}));`;
+
+const getPostMessageFunction = (eventType, data) => `
+${getPostMessage(eventType, data)}
 true;
 `;
 
 export const PLAYER_FUNCTIONS = {
-  durationScript: `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'getDuration', data: player.getDuration()}));
-true;
-`,
-  currentTimeScript: `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'getCurrentTime', data: player.getCurrentTime()}));
-true;
-`,
-  isMutedScript: `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'isMuted', data: player.isMuted()}));
-true;
-`,
-  getVolumeScript: `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'getVolume', data: player.getVolume()}));
-true;
-`,
-  getPlaybackRateScript: `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'getPlaybackRate', data: player.getPlaybackRate()}));
-true;
-`,
-  getAvailablePlaybackRatesScript: `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'getAvailablePlaybackRates', data: player.getAvailablePlaybackRates()}));
-true;
-`,
+  durationScript: getPostMessageFunction('getDuration', 'player.getDuration()'),
+  currentTimeScript: getPostMessageFunction('getCurrentTime', 'player.getCurrentTime()'),
+  isMutedScript: getPostMessageFunction('isMuted', 'player.isMuted()'),
+  getVolumeScript: getPostMessageFunction('getVolume', 'player.getVolume()'),
+  getPlaybackRateScript: getPostMessageFunction('getPlaybackRate', 'player.getPlaybackRate()'),
+  getAvailablePlaybackRatesScript: getPostMessageFunction('getAvailablePlaybackRates', 'player.getAvailablePlaybackRates()'),
   seekToScript: (seconds, allowSeekAhead) => `
 player.seekTo(${seconds}, ${allowSeekAhead})
 `,
@@ -49,7 +34,7 @@ player.seekTo(${seconds}, ${allowSeekAhead})
 
 export const playMode = {
   [PLAY_MODE]: PLAYER_FUNCTIONS.playVideo,
-  [PAUSE_MODE]: PLAYER_FUNCTIONS.pauseVideo
+  [PAUSE_MODE]: PLAYER_FUNCTIONS.pauseVideo,
 };
 
 export const soundMode = {
@@ -152,30 +137,31 @@ export const MAIN_SCRIPT = (
       }
 
       function onPlayerError(event) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'playerError', data: event.data}))
+        ${getPostMessage('playerError', 'event.data')}
       }
 
       function onPlaybackRateChange(event) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'playbackRateChange', data: event.data}))
+        ${getPostMessage('playbackRateChange', 'event.data')}
       }
 
       function onPlaybackQualityChange(event) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'playerQualityChange', data: event.data}))
+        ${getPostMessage('playerQualityChange', 'event.data')}
       }
 
       function onPlayerReady(event) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'playerReady'}))
+        ${getPostMessage('playerReady', 'event.data')}
       }
 
       var done = false;
       function onPlayerStateChange(event) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'playerStateChange', data: event.data}))
+        ${getPostMessage('playerStateChange', 'event.data')}
       }
 
       var isFullScreen = false;
       function onFullScreenChange() {
         isFullScreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-        window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'fullScreenChange', data: Boolean(isFullScreen)}));
+        
+        ${getPostMessage('fullScreenChange', 'Boolean(isFullScreen)')}
       }
 
       document.addEventListener('fullscreenchange', onFullScreenChange)
