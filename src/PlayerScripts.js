@@ -1,9 +1,10 @@
 import {MUTE_MODE, PAUSE_MODE, PLAY_MODE, UNMUTE_MODE} from './constants';
 
-const getPostMessage = (eventType, data) => `window.ReactNativeWebView.postMessage(JSON.stringify({eventType: ${eventType}, data: ${data}));`;
+const getPostMessage = (eventType, data) =>
+  `window.ReactNativeWebView.postMessage(JSON.stringify({eventType: ${eventType}, data: ${data}));`;
 
 const getPostMessageFunction = (eventType, data) => `
-${getPostMessage(eventType,data)}
+${getPostMessage(eventType, data)}
 true;
 `;
 
@@ -136,30 +137,31 @@ export const MAIN_SCRIPT = (
       }
 
       function onPlayerError(event) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'playerError', data: event.data}))
+        ${getPostMessage('playerError', 'event.data')}
       }
 
       function onPlaybackRateChange(event) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'playbackRateChange', data: event.data}))
+        ${getPostMessage('playbackRateChange', 'event.data')}
       }
 
       function onPlaybackQualityChange(event) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'playerQualityChange', data: event.data}))
+        ${getPostMessage('playerQualityChange', 'event.data')}
       }
 
       function onPlayerReady(event) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'playerReady'}))
+        ${getPostMessage('playerReady', 'event.data')}
       }
 
       var done = false;
       function onPlayerStateChange(event) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'playerStateChange', data: event.data}))
+        ${getPostMessage('playerStateChange', 'event.data')}
       }
 
       var isFullScreen = false;
       function onFullScreenChange() {
         isFullScreen = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-        window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'fullScreenChange', data: Boolean(isFullScreen)}));
+        
+        ${getPostMessage('fullScreenChange', 'Boolean(isFullScreen)')}
       }
 
       document.addEventListener('fullscreenchange', onFullScreenChange)
