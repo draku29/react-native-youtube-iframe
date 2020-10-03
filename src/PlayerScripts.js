@@ -1,35 +1,17 @@
 import {MUTE_MODE, PAUSE_MODE, PLAY_MODE, UNMUTE_MODE} from './constants';
 
-const getPlayerFunction = (eventType, data) => `
+const getPostMessageFunction = (eventType, data) => `
 window.ReactNativeWebView.postMessage(JSON.stringify({eventType: ${eventType}, data: ${data}));
 true;
 `;
 
 export const PLAYER_FUNCTIONS = {
-  durationScript: `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'getDuration', data: player.getDuration()}));
-true;
-`,
-  currentTimeScript: `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'getCurrentTime', data: player.getCurrentTime()}));
-true;
-`,
-  isMutedScript: `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'isMuted', data: player.isMuted()}));
-true;
-`,
-  getVolumeScript: `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'getVolume', data: player.getVolume()}));
-true;
-`,
-  getPlaybackRateScript: `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'getPlaybackRate', data: player.getPlaybackRate()}));
-true;
-`,
-  getAvailablePlaybackRatesScript: `
-window.ReactNativeWebView.postMessage(JSON.stringify({eventType: 'getAvailablePlaybackRates', data: player.getAvailablePlaybackRates()}));
-true;
-`,
+  durationScript: getPostMessageFunction('getDuration', 'player.getDuration()'),
+  currentTimeScript: getPostMessageFunction('getCurrentTime', 'player.getCurrentTime()'),
+  isMutedScript: getPostMessageFunction('isMuted', 'player.isMuted()'),
+  getVolumeScript: getPostMessageFunction('getVolume', 'player.getVolume()'),
+  getPlaybackRateScript: getPostMessageFunction('getPlaybackRate', 'player.getPlaybackRate()'),
+  getAvailablePlaybackRatesScript: getPostMessageFunction('getAvailablePlaybackRates', 'player.getAvailablePlaybackRates()'),
   seekToScript: (seconds, allowSeekAhead) => `
 player.seekTo(${seconds}, ${allowSeekAhead})
 `,
@@ -49,7 +31,7 @@ player.seekTo(${seconds}, ${allowSeekAhead})
 
 export const playMode = {
   [PLAY_MODE]: PLAYER_FUNCTIONS.playVideo,
-  [PAUSE_MODE]: PLAYER_FUNCTIONS.pauseVideo
+  [PAUSE_MODE]: PLAYER_FUNCTIONS.pauseVideo,
 };
 
 export const soundMode = {
